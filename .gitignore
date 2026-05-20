@@ -1,0 +1,9 @@
+env/
+.env
+__pycache__/
+*.pyc
+sessions_log.jsonl
+*.pt
+*.m4a
+*.mp3
+*.wav
