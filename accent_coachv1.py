@@ -44,11 +44,11 @@ PHONEME_RULES = [
     # Whisper transcribes what it hears — if article is missing, it shows.
     # Pattern: common noun phrases that always need an article before them.
     {
-        "pattern": r"\b(problem is|reason is|answer is|result is|point is|fact is|issue is|question is|solution is|difference is|main thing|only way|best way|real issue)\b",
-        "error_type": "article_omission",
-        "target_phoneme": "article omission (the / a / an)",
-        "bengali_note": "বাংলায় article নেই — 'the' বা 'a' বলার অভ্যাস নেই আমাদের। তাই 'the problem is' বলতে গিয়ে শুধু 'problem is' বেরিয়ে আসে।",
-        "drill": "এখন বলো: 'The problem is...' / 'A reason is...' / 'The main issue is...' — article-টা জোর দিয়ে বলো প্রথম কয়েকবার।"
+    "pattern": r"\b(problem is|reason is|answer is|result is|point is|fact is|issue is|question is|solution is|difference is|main thing|only way|best way|real issue)\b",
+    "error_type": "article_omission",
+    "target_phoneme": "article omission (the / a / an)",
+    "bengali_note": "বাংলায় article নেই — 'the' বা 'a' বলার অভ্যাস নেই আমাদের। তাই 'the problem is' বলতে গিয়ে শুধু 'problem is' বেরিয়ে আসে।",
+    "drill": "এখন বলো: 'The problem is...' / 'A reason is...' / 'The main issue is...' — article-টা জোর দিয়ে বলো প্রথম কয়েকবার।"
     },
 
     # ── RULE 3: Vowel elongation ──────────────────────────────────────
@@ -74,6 +74,7 @@ PHONEME_RULES = [
     {
         "pattern": r"\b(because|not|was|what|want|watch|wash|got|lot|hot|top|stop|problem|common|possible|obvious)\b",
         "error_type": "vowel_quality_substitution",
+        "confidence": "possible",
         "target_phoneme": "open back vowel — Bengali /ɑ/ bleeding into English short /ɒ/ and /ʌ/",
         "bengali_note": "বাংলায় 'অ' ধ্বনি open এবং full — 'because', 'not', 'was' বলার সময় এই 'অ'-টা চলে আসে। কিন্তু English-এর এই vowel-গুলো আলাদা — কোনোটা /ɒ/ (গোলাকার), কোনোটা /ʌ/ (মাঝামাঝি)। সব এক রকম শোনায় না।",
         "drill": "'not' এবং 'nut' — দুটো আলাদা vowel। 'hot' এবং 'hut' — আলাদা। এই pair-গুলো আয়নার সামনে বলো, ঠোঁটের shape দেখো।"
@@ -130,7 +131,6 @@ def transcribe_audio(model, audio_path):
     print(f"\n📝 Whisper transcript:\n   \"{transcript}\"\n")
     return transcript
 
-
 def detect_errors(transcript):
     """
     Rule-based Bengali L1 interference error detection.
@@ -141,17 +141,38 @@ def detect_errors(transcript):
 
     for rule in PHONEME_RULES:
         matches = re.findall(rule["pattern"], transcript_lower)
-        if matches:
-            errors.append({
-                "error_type": rule["error_type"],
-                "target_phoneme": rule["target_phoneme"],
-                "bengali_note": rule["bengali_note"],
-                "drill": rule["drill"],
-                "matched_words": list(set(matches))
-            })
+        if not matches:
+            continue
+
+        # Article omission: verify the article is actually missing
+        if rule["error_type"] == "article_omission":
+            real_misses = []
+            for match in matches:
+                # Find position of this match in transcript
+                match_pos = transcript_lower.find(match)
+                if match_pos == -1:
+                    continue
+                # Check what comes before it (up to 5 chars)
+                preceding = transcript_lower[max(0, match_pos - 5):match_pos].strip()
+                # If preceded by the/a/an, article was NOT dropped — skip
+                if re.search(r'\b(the|a|an)$', preceding):
+                    continue
+                real_misses.append(match)
+
+            if not real_misses:
+                continue
+            matches = real_misses
+
+        errors.append({
+            "error_type": rule["error_type"],
+            "target_phoneme": rule["target_phoneme"],
+            "confidence": rule.get("confidence", "confirmed"),
+            "bengali_note": rule["bengali_note"],
+            "drill": rule["drill"],
+            "matched_words": list(set(matches))
+        })
 
     return errors
-
 
 def generate_bengali_feedback(transcript, errors, prompt=None):
     """
@@ -201,7 +222,9 @@ Rules:
 - Bengali-তে লেখো। English word শুধু যখন target pronunciation দেখাচ্ছ।
 - Score দিও না। Numbers দিও না।  
 - "ভুল" শব্দটা avoid করো — "transfer" বা "আমাদের অভ্যাস" বলো।
-- Maximum 150 words।"""
+- Maximum 150 words।
+যদি কোনো error-এর confidence "possible" হয়, তাহলে definitive বলো না — 
+বরং বলো "এই শব্দগুলোতে সাবধান থাকো" টোনে। নিশ্চিত না হলে accuse করো না।"""
 #User messages are harder to ignore for the model 
     user_message = f"""Whisper transcript: "{transcript}"
 {prompt_context}
