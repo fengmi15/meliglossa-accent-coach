@@ -1,0 +1,241 @@
+.record-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 24px;
+}
+
+.record-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-back {
+  background: none;
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 6px 0;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  color: var(--text);
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-left: auto;
+}
+
+.sentence-reminder {
+  background: var(--brand-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.waveform-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+.waveform {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 80px;
+}
+
+.recording-dot {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--danger);
+  border-radius: 50%;
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.record-button-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.record-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.35);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.record-btn:hover:not(:disabled) {
+  background: var(--brand-dark);
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(79, 70, 229, 0.45);
+}
+
+.record-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.record-btn.recording {
+  background: var(--danger);
+  animation: pulse 1.4s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.35);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.35); }
+  50% { box-shadow: 0 4px 32px rgba(220, 38, 38, 0.65); }
+}
+
+.stop-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.mic-icon {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.record-hint {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.submitting-text {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.playback-area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.audio-player {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.playback-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 14px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-dark);
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background: var(--card-bg);
+  color: var(--brand);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--brand);
+  cursor: pointer;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--brand-light);
+}
+
+.error-banner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  color: var(--danger);
+  font-size: 15px;
+}
+
+.error-banner button {
+  align-self: stretch;
+}

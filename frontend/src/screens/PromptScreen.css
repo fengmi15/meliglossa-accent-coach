@@ -1,0 +1,93 @@
+.prompt-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: 24px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.prompt-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--brand);
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.prompt-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.bengali-instruction {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.sentence-box {
+  background: var(--brand-light);
+  border-left: 4px solid var(--brand);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+}
+
+.sentence-text {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text);
+  font-style: italic;
+}
+
+.hint-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.prompt-footer {
+  margin-top: 24px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-dark);
+}
